@@ -50,7 +50,7 @@ router.post('/', (req, res, next)=>{
 router.put('/:id', (req, res, next)=>{
     const id = req.params.id
     const text = req.body.text
-    const tweet = tweets.find((tweet) => tweet.id===id)
+    const tweet = tweet.find((tweet) => tweet.id===id)
     if(tweet){
         tweet.text= text
         res.status(200).json(tweet)
