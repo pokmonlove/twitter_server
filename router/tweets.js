@@ -1,7 +1,16 @@
 import express from 'express' //express 서버
 import * as tweetController from '../controller/tweet.js'
+import {body} from 'express-validator'
+import { validate } from '../middleware/validator.js'
 
 const router = express.Router()
+
+const validateTweet=[
+    body('text').trim().isLength({min:3}).withMessage('최소 3자 이상 입력'), 
+    validate
+]
+
+
 
 //data 
 
@@ -21,7 +30,7 @@ router.get('/:id', tweetController.getTweet)
 // http://127.0.0.1:8080/tweets
 // json 형태로 입력 후 추가된 데이터까지 모두 json으로 출력
 
-router.post('/', tweetController.CreateTweet)
+router.post('/',validateTweet,  tweetController.CreateTweet)
 
 
 // 트윗 수정 하기
