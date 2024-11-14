@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* 채팅 메시지가 표시될 컨테이너 스타일 */
+        .chat-container {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+            width: 300px;
+            height: 200px;
+            overflow-y: auto;
+        }
+         /* 개별 채팅 메시지 스타일 */
+        .chat-message {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h2>간단한 채팅</h2>
+    <form id="chatForm" action="javascript:void(0);">
+        <p>닉네임: <input type="text" id="nickname"><button type="button">설정</button></p>
+        <p>채널: <input type="text" id="channel"> <button type="button">입장</button></p>
+        <p>
+            <input type="text" id="chatInput">
+            <button type="button" onclick="sendMessage()">보내기</button>
+            <button type="button" onclick="addEmoji('🍔')">🍔</button>
+            <button type="button" onclick="addEmoji('🍕')">🍕</button>
+            <button type="button" onclick="addEmoji('🌮')">🌮</button>
+            <button type="button" onclick="addEmoji('🍟')">🍟</button>
+            <button type="button" onclick="addEmoji('🌭')">🌭</button>
+        </p>
+    </form>
+    <!-- 채팅 메시지가 표시될 컨테이너 -->
+    <div class="chat-container" id="chatContainer"></div>
+
+    <script>
+        function addEmoji(emoji) {
+            const chatInput = document.getElementById('chatInput'); // 채팅 입력란 요소 가져오기
+            chatInput.value += emoji;
+        }
+
+        function sendMessage() {
+            const chatInput = document.getElementById('chatInput');
+            const chatContainer = document.getElementById('chatContainer');
+            const message = chatInput.value.trim();
+
+            if (message) {
+                const messageElement = document.createElement('p');
+                messageElement.className = 'chat-message';
+                messageElement.textContent = message;
+                chatContainer.appendChild(messageElement);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+                chatInput.value = '';
+            }
+        }
+    </script>
+</body>
+</html>
