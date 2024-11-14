@@ -1,4 +1,4 @@
-import { Server, Socket } from "socket.io"
+import { Server } from "socket.io"
 import jwt from 'jsonwebtoken'
 import {config } from "../config.js"
 
