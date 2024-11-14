@@ -14,6 +14,5 @@ app.use((req, res, next)=> {
 })
 
 //대기
-app.listen(config.host.port)
 const server = app.listen(config.host.port)
 initSocket(server)
