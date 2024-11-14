@@ -1,33 +1,29 @@
-import express from 'express' 
+//import express from 'express' 
 
 let tweets = [{
 
     id:'1',
-    name:'김사과',
-    username:'apple',
+    userId: '1',
     text:'안녕하세요',
     createAt:Date.now().toString(),
-    url:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEqoTLo45hu_aLx01lClHTvcmuRFNSESx9vw&s'
 
 },
 {
 
     id:'2',
-    name:'반하나',
+    userId: '2',
     username:'banana',
     text:'안녕하세요',
     createAt:Date.now().toString(),
-    url:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEqoTLo45hu_aLx01lClHTvcmuRFNSESx9vw&s'
 
 },
 {
 
     id:'3',
-    name:'오렌지',
-    username:'orange',
+    userId: '1',
     text:'첫 트윗',
     createAt:Date.now().toString(),
-    url:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEqoTLo45hu_aLx01lClHTvcmuRFNSESx9vw&s'
+
 
 }
 ]

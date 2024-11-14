@@ -1,7 +1,8 @@
 import express from 'express' //express 서버
 import * as tweetController from '../controller/tweet.js'
-import {body} from 'express-validator'
+import { body } from 'express-validator'
 import { validate } from '../middleware/validator.js'
+import {isAuth} from '../middleware/auth.js'
 
 const router = express.Router()
 
@@ -10,27 +11,25 @@ const validateTweet=[
     validate
 ]
 
-
-
 //data 
 
 
 // 해당 아이디에 대한 트윗 가져오기
 // Get 방식
 // http://127.0.0.1:8080/tweets?username=:username
-router.get('/', tweetController.getTweets)
+router.get('/', isAuth, tweetController.getTweets)
 
 // 글 번호에 대한 트윗 가져오기
 // Get 방식
 // http://127.0.0.1:8080/tweets/:id
-router.get('/:id', tweetController.getTweet)
+router.get('/:id', isAuth, tweetController.getTweet)
 
 // 트윗 하기
 // Post 방식
 // http://127.0.0.1:8080/tweets
 // json 형태로 입력 후 추가된 데이터까지 모두 json으로 출력
 
-router.post('/',validateTweet,  tweetController.CreateTweet)
+router.post('/',validateTweet, isAuth, tweetController.CreateTweet)
 
 
 // 트윗 수정 하기
@@ -38,13 +37,13 @@ router.post('/',validateTweet,  tweetController.CreateTweet)
 // http://127.0.0.1:8080/tweets/:id
 // json 형태로 입력 후 추가된 데이터까지 모두 json으로 출력
 
-router.put('/:id', tweetController.UpdateTweet)
+router.put('/:id', validateTweet, isAuth, tweetController.UpdateTweet)
 
 // 주석
 // 트윗 삭제 하기
 // Delete 방식
 // http://127.0.0.1:8080/tweets/:id
 
-router.delete('/:id', tweetController.deleteTweet)
+router.delete('/:id', isAuth, tweetController.deleteTweet)
 
 export default router
