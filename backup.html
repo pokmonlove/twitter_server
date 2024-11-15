@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>클라이언트</title>
+    <!--<script src="https://cdn.socket.io/4.8.0/socket.io.min.js" integrity="sha384-OoIbkvzsFFQAG88r+IqMAjyOtYDPGO0cqK5HF5Uosdy/zUEGySeAzytENMDynREd" crossorigin="anonymous"></script>-->
+    <script>
+        function addEmoji(emoji){
+            const message = document.getElementById('message')
+            message.value += emoji
+        }
+        const socket = io()
+
+        function setNickname(){
+            const nickname = document.getElementById('nickname').value
+            socket.emit('setNickname', nickname)
+        }
+
+        function sendMessage(){
+            const message = document.getElementById('message').value
+            socket.emit('message', message)
+        }
+        function setChannel(){
+            const channel = document.getElementById('channel').value
+            socket.emit('setChannel', channel)
+        }
+        // 수신 이벤트 처리
+        socket.on('setNickname', (message)=>{
+            const chatBox = document.getElementById('chatBox')
+            const newMessage = document.createElement('p')
+            newMessage.textContent=message
+            chatBox.appendChild(newMessage)
+        })
+        socket.on('message', (message)=>{
+            console.log(message)
+            const chatBox = document.getElementById('chatBox')
+            const newMessage = document.createElement('p')
+            newMessage.textContent=`${message.sender}: ${message.message}`
+            chatBox.appendChild(newMessage)
+            document.getElementById('message').value = ''
+        })
+
+        socket.on('updateChannelList', (channelList) =>{
+            const channelListElement = document.getElementById('channelList')
+            channelListElement.innerHTML=''
+            channelList.forEach((channel)=>{
+                const channelItem = document.createElement('li')
+                channelItem.textContent = channel
+                channelListElement.appendChild(channelItem)
+            })
+        })
+    </script>
+</head>
+<body>
+    <h2>간단한 채팅</h2>
+    <form action="#">
+        <p>닉네임: <input type="text" id="nickname"><button type="button" onclick="setNickname()">설정</button></p>
+        <p>채널: <input type="text" id="channel"> <button type="button" onclick="setChannel()">입장</button></p>
+        <p><ul id="channelList"></ul></p>
+        <p>
+            <input type="text" id="message">
+            <button type="button" onclick="sendMessage()">보내기</button>
+            <button type="button" onclick="addEmoji('🍔')">🍔</button>
+            <button type="button" onclick="addEmoji('🍕')">🍕</button>
+            <button type="button" onclick="addEmoji('🌮')">🌮</button>
+            <button type="button" onclick="addEmoji('🍟')">🍟</button>
+            <button type="button" onclick="addEmoji('🌭')">🌭</button>
+        </p>
+    </form>
+    <div id="chatBox"></div>
+</body>
+</html>
+
+<!-- server.js 백업
+import express from 'express'
+import http from 'http'
+import {Server} from 'socket.io'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const app = express()
+const server = http.createServer(app) //웹서버 역할
+const io = new Server(server)
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+console.log(__filename)
+console.log(__dirname)
+// 127.0.0.1:8080/client.html
+app.use(express.static(__dirname))
+const channels = new Set()
+io.on('connection', (socket)=>{
+    console.log('사용자가 연결되었습니다')
+    let nickname = ''
+    let channel = ''
+
+    //닉네임 설정
+    socket.on('setNickname', (name)=>{
+        nickname = name
+        console.log(`닉네임 설정: ${nickname}`)
+        io.emit('setNickname', `알림: 닉네임 설정됨 ${nickname}`)
+    })
+    // 메시지 설정
+    socket.on('message', (message) => {
+        console.log(`클라이언트: ${nickname}-> ${message}`)
+        //io.emit('message', {sender: nickname, message})
+        io.to(channel).emit('message', {sender: nickname, message})
+    })
+
+    // 채널 설정
+    socket.on('setChannel', (ch)=>{
+        
+        if(channel){
+            socket.leave(channel)
+        }
+        channel=ch
+        socket.join(channel)
+        channels.add(channel)
+        console.log(`클라이언트: ${nickname}님이 채널${channel}에 입장`)
+        io.emit('updateChannelList', Array.from(channels))
+    })
+    // 소켓 종료
+    socket.on('disconnect', () => {
+        console.log(`클라이언트: ${nickname} 접속 종료`)
+    })
+})
+
+/*server.listen(8080, () => {
+    console.log('서버가 8080포트에서 실행 중~?')
+})*/
+
+server.listen(8080, ()=>{
+    console.log('서버가 5500포트에서 실행중!')
+})
+
+
+
+-->

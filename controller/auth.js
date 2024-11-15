@@ -14,15 +14,18 @@ async function createJwtToken(id){
 
 
 export async function signup(req, res, next){
-    const { username, password, name, email } = req.body
+    const { username, password, name, email, url } = req.body
     // 회원 중복 체크
     const found = await authRepository.findByUsername(username)
     if(found){
         return res.status(409).json({message: `${username}이 이미 있습니다`})
     }
     // const users = await authRepository.createUser(username, password, name, email)
-    const hashed = bcrypt.hashSync(password, config.jwt.saltRounds)
-    const users = await authRepository.createUser(username, hashed, name, email)
+    const hashed = bcrypt.hashSync(password, config.bycrpt.saltRounds)
+    const users = await authRepository.createUser({
+        username, password: hashed, name, email, url}
+    
+    )
     const token = await createJwtToken(users.id)
     // console.log(token)
     res.status(201).json({token, username})
